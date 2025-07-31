@@ -1,0 +1,29 @@
+.dashboard-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.navbar a {
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+  transition: background 0.3s;
+}
+
+.navbar a:hover {
+  background: #0056b3;
+}
+
+.content {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
