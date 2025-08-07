@@ -3,19 +3,18 @@ import api from "../../api/api";
 import "./../../styles/AuthForm.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
 interface LoginForm {
   email: string;
   motDePasse: string;
+  code2FA?: string;
 }
 
 export default function Login() {
-  const [form, setForm] = useState<LoginForm>({ email: "", motDePasse: "" });
+  const [form, setForm] = useState<LoginForm>({
+    email: "",
+    motDePasse: "",
+  });
   const navigate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,11 +24,8 @@ export default function Login() {
       alert("Connexion réussie !");
       navigate("/dashboard");
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        alert("Erreur: " + err.message);
-      } else {
-        alert("Erreur inconnue");
-      }
+      console.error(err);
+      alert("Erreur connexion: " + (err instanceof Error ? err.message : ""));
     }
   };
 
@@ -43,7 +39,7 @@ export default function Login() {
             name="email"
             placeholder="Email"
             value={form.email}
-            onChange={handleChange}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
           <input
             className="auth-input"
@@ -51,8 +47,9 @@ export default function Login() {
             type="password"
             placeholder="Mot de passe"
             value={form.motDePasse}
-            onChange={handleChange}
+            onChange={(e) => setForm({ ...form, motDePasse: e.target.value })}
           />
+
           <button className="auth-button" type="submit">
             Se connecter
           </button>
