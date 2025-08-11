@@ -1,0 +1,88 @@
+{
+  "app": {
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "settings": "Settings",
+    "language": "Language"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "signin_success": "Signed in successfully!",
+    "signup_success": "Registered successfully!"
+  },
+  "nav": {
+    "users": "Users",
+    "cars": "Cars",
+    "drivers": "Drivers",
+    "gps": "GPS"
+  },
+  "users": {
+    "title": "Users management",
+    "status": "Status",
+    "add": "Add",
+    "edit": "Edit",
+    "editTitle": "Edit User",
+    "delete": "Delete",
+    "active": "Active",
+    "inactive": "Inactive",
+    "suspended": "Suspended"
+  },
+  "common": {
+    "status": "Status",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "actions": "Actions",
+    "active": "Active",
+    "inactive": "Inactive",
+    "suspended": "Suspended",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "drivers": {
+    "title": "Drivers management",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "license": "License",
+    "editTitle": "Edit Driver"
+  },
+  "gps": {
+    "title": "GPS Records",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "description": "Description",
+    "editTitle": "Edit GPS"
+  },
+
+  "cars": {
+    "title": "Cars management",
+    "brand": "Brand",
+    "model": "Model",
+    "plate": "License plate",
+    "editTitle": "Edit Car"
+  },
+  "missions": {
+    "title": "Missions management",
+    "titleLabel": "Title",
+    "titleCol": "Title",
+    "driver": "Driver",
+    "chooseDriver": "Choose driver",
+    "car": "Car",
+    "chooseCar": "Choose car",
+    "gps": "GPS",
+    "chooseGps": "Choose GPS",
+    "start": "Start date",
+    "end": "End date",
+    "state": "State",
+    "state_planned": "Planned",
+    "state_running": "In progress",
+    "state_done": "Completed",
+    "state_cancelled": "Cancelled",
+    "editTitle": "Edit Mission",
+    "description": "Description"
+  }
+}

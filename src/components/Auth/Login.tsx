@@ -1,31 +1,30 @@
 import { useState } from "react";
-import api from "../../api/api";
-import "./../../styles/AuthForm.css";
-import { Link } from "react-router-dom";
+import "../../styles/AuthForm.css";
 import { useNavigate } from "react-router-dom";
-interface LoginForm {
-  email: string;
-  motDePasse: string;
-  code2FA?: string;
-}
+import type { LoginPayload } from "../../types/auth";
+import { login } from "../../api/auth";
+import { useAuth } from "../../hooks/useAuth.tsx";
 
 export default function Login() {
-  const [form, setForm] = useState<LoginForm>({
-    email: "",
-    motDePasse: "",
-  });
+  const [form, setForm] = useState<LoginPayload>({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
   const navigate = useNavigate();
+  const { loginLocal } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErr(null);
+    setLoading(true);
     try {
-      const res = await api.post("/auth/login", form);
-      localStorage.setItem("token", res.data.token);
-      alert("Connexion réussie !");
-      navigate("/dashboard");
-    } catch (err: unknown) {
-      console.error(err);
-      alert("Erreur connexion: " + (err instanceof Error ? err.message : ""));
+      const res = await login(form); // { email, password }
+      loginLocal(res.token, res.user);
+      navigate("/dashboard", { replace: true });
+    } catch (e: any) {
+      setErr(e?.response?.data?.message || "Erreur de connexion");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -33,30 +32,35 @@ export default function Login() {
     <div className="auth-container">
       <div className="auth-card">
         <h2>Connexion</h2>
+
+        {err && <div className="auth-error">{err}</div>}
+
         <form onSubmit={handleSubmit}>
           <input
             className="auth-input"
             name="email"
+            type="email"
             placeholder="Email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
           />
           <input
             className="auth-input"
-            name="motDePasse"
+            name="password"
             type="password"
             placeholder="Mot de passe"
-            value={form.motDePasse}
-            onChange={(e) => setForm({ ...form, motDePasse: e.target.value })}
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
           />
 
-          <button className="auth-button" type="submit">
-            Se connecter
+          <button className="auth-button" type="submit" disabled={loading}>
+            {loading ? "Connexion..." : "Se connecter"}
           </button>
         </form>
-        <div className="auth-link">
-          Pas encore de compte? <Link to="/register">S'inscrire</Link>
-        </div>
+
+        {/* Registration temporarily removed */}
       </div>
     </div>
   );

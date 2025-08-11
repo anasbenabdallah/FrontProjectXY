@@ -1,0 +1,87 @@
+{
+  "app": {
+    "dashboard": "Tableau de bord",
+    "logout": "Déconnexion",
+    "settings": "Paramètres",
+    "language": "Langue"
+  },
+  "auth": {
+    "login": "Se connecter",
+    "register": "S'inscrire",
+    "email": "Email",
+    "password": "Mot de passe",
+    "name": "Nom",
+    "signin_success": "Connexion réussie !",
+    "signup_success": "Inscription réussie !"
+  },
+  "nav": {
+    "users": "Utilisateurs",
+    "cars": "Voitures",
+    "drivers": "Chauffeurs",
+    "gps": "GPS"
+  },
+  "users": {
+    "title": "Gestion des Utilisateurs",
+    "status": "Statut",
+    "add": "Ajouter",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "active": "Actif",
+    "editTitle": "Modifier Utilisateur",
+    "inactive": "Inactif",
+    "suspended": "Suspendu"
+  },
+  "common": {
+    "status": "Statut",
+    "add": "Ajouter",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "actions": "Actions",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "suspended": "Suspendu",
+    "cancel": "Annuler",
+    "save": "Sauvegarder"
+  },
+  "drivers": {
+    "title": "Gestion des Chauffeurs",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "license": "Permis",
+    "editTitle": "Modifier Chauffeur"
+  },
+  "gps": {
+    "title": "Enregistrements GPS",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "description": "Description",
+    "editTitle": "Modifier GPS"
+  },
+  "cars": {
+    "title": "Gestion des Voitures",
+    "brand": "Marque",
+    "model": "Modèle",
+    "plate": "Immatriculation",
+    "editTitle": "Modifier Voiture"
+  },
+  "missions": {
+    "title": "Gestion des Missions",
+    "titleLabel": "Titre",
+    "titleCol": "Titre",
+    "driver": "Chauffeur",
+    "chooseDriver": "Choisir chauffeur",
+    "car": "Voiture",
+    "chooseCar": "Choisir voiture",
+    "gps": "GPS",
+    "chooseGps": "Choisir GPS",
+    "start": "Date de début",
+    "end": "Date de fin",
+    "state": "État",
+    "state_planned": "Planifiée",
+    "state_running": "En cours",
+    "state_done": "Terminée",
+    "state_cancelled": "Annulée",
+    "editTitle": "Modifier Mission",
+    "description": "Description"
+  }
+}
