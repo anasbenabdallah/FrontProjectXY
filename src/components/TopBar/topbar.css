@@ -1,0 +1,54 @@
+/* src/components/Topbar/topbar.css */
+.sf-topbar {
+  position: sticky; /* stays at top while scrolling the content area */
+  top: 0;
+  z-index: 5;
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.sf-topbar-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.sf-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sf-topbar-user {
+  text-align: right;
+  line-height: 1.1;
+}
+
+.sf-topbar-user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.sf-topbar-user-role {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.sf-topbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  color: #0f172a;
+  background: #fff;
+}

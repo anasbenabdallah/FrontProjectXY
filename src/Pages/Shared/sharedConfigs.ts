@@ -3,52 +3,84 @@ import type { EntityType } from "../../types/shared";
 
 export type FieldDef = {
   name: string; // key inside data.*
-  label: string;
+  labelKey: string; // i18n key
   required?: boolean;
 };
 
 export type EntityConfig = {
   type: EntityType;
-  title: string;
-  fields: FieldDef[]; // used for form + columns
+  titleKey: string;
+  editTitleKey?: string;
+  fields: FieldDef[];
 };
 
 export const configs: Record<EntityType, EntityConfig> = {
-  cars: {
-    type: "cars",
-    title: "Voitures",
-    fields: [
-      { name: "marque", label: "Marque", required: true },
-      { name: "modele", label: "Modèle" },
-      { name: "immatriculation", label: "Immatriculation", required: true },
-    ],
-  },
-  drivers: {
-    type: "drivers",
-    title: "Chauffeurs",
-    fields: [
-      { name: "nom", label: "Nom", required: true },
-      { name: "prenom", label: "Prénom" },
-      { name: "email", label: "Email" },
-      { name: "tel", label: "Téléphone" },
-    ],
-  },
   users: {
     type: "users",
-    title: "Utilisateurs",
+    titleKey: "users.title",
+    editTitleKey: "users.editTitle",
     fields: [
-      { name: "email", label: "Email", required: true },
-      { name: "type", label: "Rôle" }, // e.g., super_admin/admin/user
+      { name: "username", labelKey: "users.username", required: true },
+      { name: "email", labelKey: "auth.email", required: true },
+      { name: "phone", labelKey: "users.phone" },
+      {
+        name: "role",
+        labelKey: "users.role", // Le titre affiché en table et formulaire
+        required: true,
+      },
     ],
   },
-  enums: {
-    type: "enums",
-    title: "GPS / Enums",
+
+  cars: {
+    type: "cars",
+    titleKey: "cars.title",
+    editTitleKey: "cars.editTitle",
     fields: [
-      { name: "attr", label: "Attribut", required: true },
-      { name: "value", label: "Valeur", required: true },
-      { name: "groupId", label: "Groupe ID" },
-      { name: "description", label: "Description" },
+      { name: "license_plate", labelKey: "cars.plate", required: true },
+      { name: "make", labelKey: "cars.make", required: true },
+      { name: "model", labelKey: "cars.model", required: true },
+      { name: "year", labelKey: "cars.year" },
+      { name: "gps_number", labelKey: "cars.gps_number" },
+      { name: "vehicle_unit", labelKey: "cars.vehicle_unit" },
+      { name: "description", labelKey: "cars.description" },
+      { name: "active", labelKey: "common.active" },
+    ],
+  },
+
+  drivers: {
+    type: "drivers",
+    titleKey: "drivers.title",
+    editTitleKey: "drivers.editTitle",
+    fields: [
+      { name: "prenom", labelKey: "drivers.firstName", required: true },
+      { name: "nom", labelKey: "drivers.lastName", required: true },
+      { name: "email", labelKey: "auth.email" },
+      { name: "tel", labelKey: "drivers.phone" },
+    ],
+  },
+
+  gps: {
+    type: "gps",
+    titleKey: "gps.title",
+    editTitleKey: "gps.editTitle",
+    fields: [
+      { name: "gps_device_id", labelKey: "gps.deviceId", required: true },
+      { name: "gps_number", labelKey: "gps.number" },
+      { name: "vehicle_id", labelKey: "gps.vehicleId" },
+      { name: "imei", labelKey: "gps.imei" },
+      { name: "description", labelKey: "gps.description" },
+    ],
+  },
+
+  affectations: {
+    type: "affectations",
+    titleKey: "affectations.title",
+    editTitleKey: "affectations.editTitle",
+    fields: [
+      { name: "carId", labelKey: "affectations.carId", required: true },
+      { name: "driverId", labelKey: "affectations.driverId", required: true },
+      { name: "startAt", labelKey: "affectations.startAt" },
+      { name: "endAt", labelKey: "affectations.endAt" },
     ],
   },
 };

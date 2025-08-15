@@ -36,10 +36,10 @@ export default function Navbar() {
               {t("nav.drivers")}
             </Button>
             <Button color="inherit" component={Link} to="gps">
-              gps
+              {t("nav.gps")}
             </Button>
-            <Button color="inherit" component={Link} to="missions">
-              Missions
+            <Button color="inherit" component={Link} to="affectations">
+              {t("affect.title")}
             </Button>
 
             <LanguageSwitcher />

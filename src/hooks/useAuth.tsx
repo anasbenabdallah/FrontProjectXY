@@ -18,15 +18,21 @@ const AuthCtx = createContext<Ctx>({
   refresh: async () => {},
 });
 
+// ✅ helper to ensure role is always set
+const normalizeUser = (u: AuthUser): AuthUser => ({
+  ...u,
+  role: u.data?.type, // copy role from backend into top-level field
+});
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // on first load, try get user
+  // fetch latest user from backend
   const refresh = async () => {
     try {
-      const { data } = await api.get<AuthUser>("/auth/me");
-      setUser(data);
+      const { data } = await api.get<AuthUser>("/api/auth/me");
+      setUser(normalizeUser(data));
     } catch {
       setUser(null);
     } finally {
@@ -34,15 +40,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // when logging in from Login/Register, we can set token immediately
+  // when logging in
   const loginLocal = (token: string, u?: AuthUser) => {
     localStorage.setItem("token", token);
     if (u) {
-      localStorage.setItem("user", JSON.stringify(u));
-      setUser(u);
+      const normalized = normalizeUser(u);
+      localStorage.setItem("user", JSON.stringify(normalized));
+      setUser(normalized);
       setLoading(false);
     } else {
-      // fallback: fetch /auth/me to populate
       refresh();
     }
   };
@@ -53,12 +59,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  // load from storage on startup
   useEffect(() => {
     const t = localStorage.getItem("token");
     const cached = localStorage.getItem("user");
     if (t && cached) {
       try {
-        setUser(JSON.parse(cached) as AuthUser);
+        const parsed = JSON.parse(cached) as AuthUser;
+        setUser(normalizeUser(parsed));
         setLoading(false);
       } catch {
         refresh();
@@ -81,4 +89,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 /* eslint-disable react-refresh/only-export-components */
 export const useAuth = () => useContext(AuthCtx);
 export const hasRole = (user: AuthUser | null, roles: Role[]) =>
-  !!user && roles.includes(user.role);
+  !!user && roles.includes(user.role as Role);

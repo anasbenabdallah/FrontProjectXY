@@ -29,7 +29,14 @@
     "delete": "Delete",
     "active": "Active",
     "inactive": "Inactive",
-    "suspended": "Suspended"
+    "suspended": "Suspended",
+    "role": "Role",
+    "roles": {
+      "conducteur": "Driver",
+      "utilisateur": "User",
+      "admin": "Admin",
+      "super_admin": "Super Admin"
+    }
   },
   "common": {
     "status": "Status",
@@ -41,21 +48,25 @@
     "inactive": "Inactive",
     "suspended": "Suspended",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "empty": "No items"
   },
   "drivers": {
     "title": "Drivers management",
     "firstName": "First name",
     "lastName": "Last name",
     "license": "License",
-    "editTitle": "Edit Driver"
+    "editTitle": "Edit Driver",
+    "phone": "Phone"
   },
   "gps": {
     "title": "GPS Records",
     "latitude": "Latitude",
     "longitude": "Longitude",
     "description": "Description",
-    "editTitle": "Edit GPS"
+    "editTitle": "Edit GPS",
+    "identifier": "Identifier",
+    "group": "Group"
   },
 
   "cars": {
@@ -84,5 +95,38 @@
     "state_cancelled": "Cancelled",
     "editTitle": "Edit Mission",
     "description": "Description"
+  },
+  "affect": {
+    "title": "Assignments",
+    "notes": "Notes",
+    "assign": "Assign",
+    "creating": "Creating...",
+    "editTitle": "Edit assignment",
+    "active": "Active",
+    "closed": "Closed",
+    "deleting": "Deleting...",
+    "empty": "No active assignments",
+    "busyTag": " — (busy)"
+  },
+  "dashboard": {
+    "welcome": "Welcome to Fleet Manager",
+    "subtitle": "Monitor and manage your entire vehicle fleet in real-time",
+    "kpis": {
+      "totalVehicles": "Total Vehicles",
+      "totalDrivers": "Active Drivers",
+      "vehiclesInUse": "Vehicles in Use",
+      "availableVehicles": "Available Vehicles"
+    },
+    "actions": {
+      "title": "Quick Actions",
+      "addVehicle": "Add New Vehicle",
+      "addDriver": "Add New Driver",
+      "addGps": "Add New GPS"
+    },
+    "overview": {
+      "title": "Fleet Overview",
+      "available": "Available Vehicles",
+      "inUse": "Vehicles in Use"
+    }
   }
 }

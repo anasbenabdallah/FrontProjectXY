@@ -13,6 +13,6 @@ export async function login(payload: LoginPayload) {
 
 // keep if you’ll add a /auth/me later; otherwise you can remove for now
 export async function me() {
-  const { data } = await api.get<AuthUser>("api/auth/me");
+  const { data } = await api.get<AuthUser>("/api/auth/me");
   return data;
 }

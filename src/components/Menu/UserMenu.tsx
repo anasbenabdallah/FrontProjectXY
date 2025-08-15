@@ -1,8 +1,15 @@
+// src/components/UserMenu/UserMenu.tsx
 import { useState } from "react";
-import { Avatar, Typography, IconButton, Menu, MenuItem } from "@mui/material";
+import { Avatar, Menu, MenuItem, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function UserMenu() {
+export default function UserMenu({
+  initials,
+  email,
+}: {
+  initials: string;
+  email: string;
+}) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -18,14 +25,14 @@ export default function UserMenu() {
   return (
     <>
       <IconButton onClick={handleMenuOpen} sx={{ ml: 2 }}>
-        <Avatar></Avatar>
-        <Typography variant="body1" sx={{ ml: 1, color: "white" }}></Typography>
+        <Avatar sx={{ bgcolor: "#1976d2" }}>{initials}</Avatar>
       </IconButton>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
+        <MenuItem disabled>{email}</MenuItem>
         <MenuItem
           onClick={() => {
             handleMenuClose();

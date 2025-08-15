@@ -1,0 +1,121 @@
+:root {
+  --sf-bg: #f5f7fb;
+  --sf-text: #1f2937;
+  --sf-muted: #6b7280;
+  --sf-border: #e5e7eb;
+  --sf-primary: #0ea5e9; /* sky-500-ish */
+  --sf-hover: #f9fafb;
+  --sf-active-bg: #f0f9ff;
+}
+
+.sf-sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: #fff;
+  border-right: 1px solid var(--sf-border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.sf-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--sf-border);
+}
+.sf-logo {
+  height: 40px;
+  width: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid var(--sf-border);
+  font-weight: 700;
+  color: #111827;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.sf-brand-text {
+  line-height: 1.1;
+}
+.sf-brand-mini {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #0284c7;
+  font-weight: 600;
+}
+.sf-brand-name {
+  font-weight: 800;
+}
+
+.sf-nav {
+  padding: 8px 0;
+  overflow: auto;
+}
+.sf-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: #374151;
+  border-left: 4px solid transparent;
+  transition: background 0.15s, color 0.15s;
+}
+.sf-link:hover {
+  background: var(--sf-hover);
+}
+.sf-link.active {
+  color: var(--sf-primary);
+  background: var(--sf-active-bg);
+  border-left-color: var(--sf-primary);
+  font-weight: 600;
+}
+
+.sf-subheader {
+  margin: 12px 18px 6px;
+  font-size: 12px;
+  color: var(--sf-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.sf-subnav {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+}
+.sf-sublink {
+  display: block;
+  padding: 8px 30px;
+  text-decoration: none;
+  color: #4b5563;
+  border-left: 4px solid transparent;
+}
+.sf-sublink:hover {
+  background: var(--sf-hover);
+}
+.sf-sublink.active {
+  color: var(--sf-primary);
+  background: var(--sf-active-bg);
+  border-left-color: var(--sf-primary);
+  font-weight: 600;
+}
+
+.sf-footer {
+  margin-top: auto;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--sf-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--sf-border);
+}
+.sf-footer-icon {
+  color: #94a3b8;
+}

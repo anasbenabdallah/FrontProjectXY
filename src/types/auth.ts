@@ -1,8 +1,9 @@
-// types/auth.ts
 export type LoginPayload = {
   email: string;
-  password: string; // <-- align with backend
+  password: string;
 };
+
+export type Role = "super_admin" | "admin" | "utilisateur" | "conducteur";
 
 export type AuthUser = {
   _id: string;
@@ -10,8 +11,9 @@ export type AuthUser = {
   type: "users";
   data: {
     email: string;
-    type: "super_admin" | "admin" | "user";
+    type: Role; // from backend
   };
+  role?: Role; // 🔹 normalized role for frontend use
   createdAt?: string;
   updatedAt?: string;
 };
