@@ -226,87 +226,89 @@ export default function AffectationsPage() {
 
       {err && <Alert severity="error">{err}</Alert>}
 
-      {/* Create form */}
-      <Paper sx={{ p: 2 }}>
-        <Stack direction="row" gap={2} flexWrap="wrap" alignItems="center">
-          <Select
-            displayEmpty
-            value={carId}
-            onChange={(e) => setCarId(e.target.value)}
-            sx={{ minWidth: 260 }}
-          >
-            <MenuItem value="" disabled>
-              {t("missions.chooseCar")}
-            </MenuItem>
-            {cars.map((c) => (
-              <MenuItem
-                key={c._id}
-                value={c._id}
-                disabled={busyCarIds.has(String(c._id))}
-              >
-                {labelCar(c)}
-                {busyCarIds.has(String(c._id))
-                  ? t("affect.busyTag", " — (busy)")
-                  : ""}
+      {/* Create form → seulement si l'utilisateur a la permission "create" */}
+      {can("affectations", "create") && (
+        <Paper sx={{ p: 2 }}>
+          <Stack direction="row" gap={2} flexWrap="wrap" alignItems="center">
+            <Select
+              displayEmpty
+              value={carId}
+              onChange={(e) => setCarId(e.target.value)}
+              sx={{ minWidth: 260 }}
+            >
+              <MenuItem value="" disabled>
+                {t("missions.chooseCar")}
               </MenuItem>
-            ))}
-          </Select>
+              {cars.map((c) => (
+                <MenuItem
+                  key={c._id}
+                  value={c._id}
+                  disabled={busyCarIds.has(String(c._id))}
+                >
+                  {labelCar(c)}
+                  {busyCarIds.has(String(c._id))
+                    ? t("affect.busyTag", " — (busy)")
+                    : ""}
+                </MenuItem>
+              ))}
+            </Select>
 
-          <Select
-            displayEmpty
-            value={driverId}
-            onChange={(e) => setDriverId(e.target.value)}
-            sx={{ minWidth: 220 }}
-          >
-            <MenuItem value="" disabled>
-              {t("missions.chooseDriver")}
-            </MenuItem>
-            {drivers.map((d) => (
-              <MenuItem
-                key={d._id}
-                value={d._id}
-                disabled={busyDriverIds.has(String(d._id))}
-              >
-                {labelDriver(d)}
-                {busyDriverIds.has(String(d._id))
-                  ? t("affect.busyTag", " — (busy)")
-                  : ""}
+            <Select
+              displayEmpty
+              value={driverId}
+              onChange={(e) => setDriverId(e.target.value)}
+              sx={{ minWidth: 220 }}
+            >
+              <MenuItem value="" disabled>
+                {t("missions.chooseDriver")}
               </MenuItem>
-            ))}
-          </Select>
+              {drivers.map((d) => (
+                <MenuItem
+                  key={d._id}
+                  value={d._id}
+                  disabled={busyDriverIds.has(String(d._id))}
+                >
+                  {labelDriver(d)}
+                  {busyDriverIds.has(String(d._id))
+                    ? t("affect.busyTag", " — (busy)")
+                    : ""}
+                </MenuItem>
+              ))}
+            </Select>
 
-          <Select
-            displayEmpty
-            value={gpsId}
-            onChange={(e) => setGpsId(e.target.value)}
-            sx={{ minWidth: 220 }}
-          >
-            <MenuItem value="">{t("missions.chooseGps")}</MenuItem>
-            {gpsList.map((g) => (
-              <MenuItem key={g._id} value={g._id}>
-                {labelGps(g)}
-              </MenuItem>
-            ))}
-          </Select>
+            <Select
+              displayEmpty
+              value={gpsId}
+              onChange={(e) => setGpsId(e.target.value)}
+              sx={{ minWidth: 220 }}
+            >
+              <MenuItem value="">{t("missions.chooseGps")}</MenuItem>
+              {gpsList.map((g) => (
+                <MenuItem key={g._id} value={g._id}>
+                  {labelGps(g)}
+                </MenuItem>
+              ))}
+            </Select>
 
-          <TextField
-            label={t("affect.notes", "Notes")}
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            sx={{ minWidth: 260 }}
-          />
+            <TextField
+              label={t("affect.notes", "Notes")}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              sx={{ minWidth: 260 }}
+            />
 
-          <Button
-            variant="contained"
-            onClick={handleCreate}
-            disabled={creating || !carId || !driverId}
-          >
-            {creating
-              ? t("affect.creating", "Creating...")
-              : t("affect.assign", "Assign")}
-          </Button>
-        </Stack>
-      </Paper>
+            <Button
+              variant="contained"
+              onClick={handleCreate}
+              disabled={creating || !carId || !driverId}
+            >
+              {creating
+                ? t("affect.creating", "Creating...")
+                : t("affect.assign", "Assign")}
+            </Button>
+          </Stack>
+        </Paper>
+      )}
 
       {/* Active assignments */}
       <TableContainer component={Paper}>
@@ -344,13 +346,17 @@ export default function AffectationsPage() {
                   </TableCell>
                   <TableCell>{r.data.notes || "—"}</TableCell>
                   <TableCell align="right">
-                    <Button
-                      size="small"
-                      sx={{ mr: 1 }}
-                      onClick={() => openEdit(r)}
-                    >
-                      {t("common.edit")}
-                    </Button>
+                    {/* Bouton Modifier seulement si "update" */}
+                    {can("affectations", "update") && (
+                      <Button
+                        size="small"
+                        sx={{ mr: 1 }}
+                        onClick={() => openEdit(r)}
+                      >
+                        {t("common.edit")}
+                      </Button>
+                    )}
+                    {/* Bouton Supprimer seulement si "delete" */}
                     {can("affectations", "delete") && (
                       <Button
                         size="small"
@@ -384,84 +390,90 @@ export default function AffectationsPage() {
         </Button>
       </Box>
 
-      {/* Edit dialog */}
-      <Dialog
-        open={!!editing}
-        onClose={() => setEditing(null)}
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle>{t("affect.editTitle", "Edit assignment")}</DialogTitle>
-        <DialogContent sx={{ pt: 2 }}>
-          <Stack gap={2}>
-            <Select
-              value={editCarId}
-              onChange={(e) => setEditCarId(e.target.value)}
-              fullWidth
-            >
-              {cars.map((c) => (
-                <MenuItem key={c._id} value={c._id}>
-                  {labelCar(c)}
+      {/* Edit dialog seulement si permission update */}
+      {can("affectations", "update") && (
+        <Dialog
+          open={!!editing}
+          onClose={() => setEditing(null)}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle>{t("affect.editTitle", "Edit assignment")}</DialogTitle>
+          <DialogContent sx={{ pt: 2 }}>
+            <Stack gap={2}>
+              <Select
+                value={editCarId}
+                onChange={(e) => setEditCarId(e.target.value)}
+                fullWidth
+              >
+                {cars.map((c) => (
+                  <MenuItem key={c._id} value={c._id}>
+                    {labelCar(c)}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <Select
+                value={editDriverId}
+                onChange={(e) => setEditDriverId(e.target.value)}
+                fullWidth
+              >
+                {drivers.map((d) => (
+                  <MenuItem key={d._id} value={d._id}>
+                    {labelDriver(d)}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <Select
+                value={editGpsId}
+                onChange={(e) => setEditGpsId(e.target.value)}
+                fullWidth
+                displayEmpty
+              >
+                <MenuItem value="">{t("missions.chooseGps")}</MenuItem>
+                {gpsList.map((g) => (
+                  <MenuItem key={g._id} value={g._id}>
+                    {labelGps(g)}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <TextField
+                label={t("affect.notes", "Notes")}
+                value={editNotes}
+                onChange={(e) => setEditNotes(e.target.value)}
+                fullWidth
+              />
+
+              <Select
+                value={editStatus}
+                onChange={(e) =>
+                  setEditStatus(e.target.value as "true" | "false")
+                }
+                fullWidth
+              >
+                <MenuItem value="true">{t("affect.active", "Active")}</MenuItem>
+                <MenuItem value="false">
+                  {t("affect.closed", "Closed")}
                 </MenuItem>
-              ))}
-            </Select>
-
-            <Select
-              value={editDriverId}
-              onChange={(e) => setEditDriverId(e.target.value)}
-              fullWidth
+              </Select>
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setEditing(null)}>
+              {t("common.cancel")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleSaveEdit}
+              disabled={saving}
             >
-              {drivers.map((d) => (
-                <MenuItem key={d._id} value={d._id}>
-                  {labelDriver(d)}
-                </MenuItem>
-              ))}
-            </Select>
-
-            <Select
-              value={editGpsId}
-              onChange={(e) => setEditGpsId(e.target.value)}
-              fullWidth
-              displayEmpty
-            >
-              <MenuItem value="">{t("missions.chooseGps")}</MenuItem>
-              {gpsList.map((g) => (
-                <MenuItem key={g._id} value={g._id}>
-                  {labelGps(g)}
-                </MenuItem>
-              ))}
-            </Select>
-
-            <TextField
-              label={t("affect.notes", "Notes")}
-              value={editNotes}
-              onChange={(e) => setEditNotes(e.target.value)}
-              fullWidth
-            />
-
-            <Select
-              value={editStatus}
-              onChange={(e) =>
-                setEditStatus(e.target.value as "true" | "false")
-              }
-              fullWidth
-            >
-              <MenuItem value="true">{t("affect.active", "Active")}</MenuItem>
-              <MenuItem value="false">{t("affect.closed", "Closed")}</MenuItem>
-            </Select>
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditing(null)}>{t("common.cancel")}</Button>
-          <Button
-            variant="contained"
-            onClick={handleSaveEdit}
-            disabled={saving}
-          >
-            {saving ? t("common.save", "Save") : t("common.save")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+              {saving ? t("common.save", "Save") : t("common.save")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Stack>
   );
 }

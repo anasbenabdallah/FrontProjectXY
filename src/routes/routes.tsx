@@ -2,6 +2,9 @@
 import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Protected from "./protected";
+const MissionsPage = lazy(() => import("../Pages/Missions/Missions"));
+const RapportsPage = lazy(() => import("../Pages/Rapports/Rapports"));
+const MaintenancePage = lazy(() => import("../Pages/Maintenance/Maintenance"));
 
 const DashboardLayout = lazy(() => import("../layouts/DashboardLayout"));
 const DashboardPage = lazy(() => import("../Pages/Dashboard/Dashboard"));
@@ -33,13 +36,50 @@ export const router = createBrowserRouter([
       </Protected>
     ),
     children: [
-      { index: true, element: <DashboardPage /> }, // /dashboard
-      { path: "carte-interactif", element: <CarteInteractivePage /> }, // 🔹 ajout ici
+      // 🔹 Accessible to all except conducteur
+      {
+        index: true,
+        element: (
+          <Protected roles={["admin", "super_admin", "utilisateur"]}>
+            <DashboardPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "missions",
+        element: (
+          <Protected roles={["admin", "super_admin", "utilisateur"]}>
+            <MissionsPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "rapports",
+        element: (
+          <Protected roles={["admin", "super_admin", "utilisateur"]}>
+            <RapportsPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "maintenance",
+        element: (
+          <Protected roles={["admin", "super_admin", "utilisateur"]}>
+            <MaintenancePage />
+          </Protected>
+        ),
+      },
+      // 🔹 Carte interactif → accessible to everyone (including conducteur)
+      { path: "carte-interactif", element: <CarteInteractivePage /> },
 
-      // /dashboard/configuration/*
+      // 🔹 Configuration pages → no conducteur
       {
         path: "configuration",
-        element: <ConfigurationLayout />, // tabs + <Outlet/>
+        element: (
+          <Protected roles={["admin", "super_admin", "utilisateur"]}>
+            <ConfigurationLayout /> {/* tabs + <Outlet/> */}
+          </Protected>
+        ),
         children: [
           { index: true, element: <Navigate to="utilisateurs" replace /> },
           { path: "utilisateurs", element: <SharedPage entity="users" /> },

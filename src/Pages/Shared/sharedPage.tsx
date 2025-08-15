@@ -30,6 +30,7 @@ import {
 } from "../../api/shared";
 import { configs, type EntityConfig, type FieldDef } from "./sharedConfigs";
 import { usePermissions } from "../../hooks/usePermissions";
+import { useAuth } from "../../hooks/useAuth"; // add this
 
 type Props = { entity: EntityType };
 type AnyData = Record<string, any>;
@@ -37,6 +38,7 @@ type AnyData = Record<string, any>;
 export default function SharedPage({ entity }: Props) {
   const { t } = useTranslation();
   const { can } = usePermissions(); // ✅
+  const { refresh, user: loggedUser } = useAuth(); // get current user & refresh
 
   const cfg: EntityConfig = useMemo(() => configs[entity], [entity]);
 
@@ -122,19 +124,19 @@ export default function SharedPage({ entity }: Props) {
 
       let payloadData = { ...editing.data };
       if (isUsers && editing.data.role) {
-        payloadData.type = editing.data.role; // map role → type for backend
+        payloadData.type = editing.data.role;
         delete payloadData.role;
       }
 
-      await updateEntity<AnyData>(
-        entity, // type
-        id, // id en 2ème
-        {
-          // payload en 3ème
-          data: payloadData,
-          status: isUsers ? true : editing.status,
-        }
-      );
+      await updateEntity<AnyData>(entity, id, {
+        data: payloadData,
+        status: isUsers ? true : editing.status,
+      });
+
+      // 🔹 If it's the logged-in user, refresh auth context & localStorage
+      if (isUsers && id === loggedUser?._id) {
+        await refresh();
+      }
 
       setEditing(null);
       fetchAll();
@@ -194,31 +196,33 @@ export default function SharedPage({ entity }: Props) {
   return (
     <Stack spacing={2}>
       <Typography variant="h5">{t(cfg.titleKey)}</Typography>
-
       {err && <Alert severity="error">{err}</Alert>}
-
-      {/* Create form */}
-      <Paper sx={{ p: 2 }}>
-        <Stack direction="row" gap={1} flexWrap="wrap">
-          {cfg.fields.map((f) =>
-            renderField(f, form[f.name] ?? "", (v) => onChangeField(f, v))
-          )}
-          {!isUsers && (
-            <Select
-              value={status ? "true" : "false"}
-              onChange={(e) => setStatus(e.target.value === "true")}
-              sx={{ minWidth: 160 }}
+      {can(entity, "create") && (
+        <Paper sx={{ p: 2 }}>
+          <Stack direction="row" gap={1} flexWrap="wrap">
+            {cfg.fields.map((f) =>
+              renderField(f, form[f.name] ?? "", (v) => onChangeField(f, v))
+            )}
+            {!isUsers && (
+              <Select
+                value={status ? "true" : "false"}
+                onChange={(e) => setStatus(e.target.value === "true")}
+                sx={{ minWidth: 160 }}
+              >
+                <MenuItem value="true">{t("common.active")}</MenuItem>
+                <MenuItem value="false">{t("common.inactive")}</MenuItem>
+              </Select>
+            )}
+            <Button
+              variant="contained"
+              onClick={handleCreate}
+              disabled={loading}
             >
-              <MenuItem value="true">{t("common.active")}</MenuItem>
-              <MenuItem value="false">{t("common.inactive")}</MenuItem>
-            </Select>
-          )}
-          <Button variant="contained" onClick={handleCreate} disabled={loading}>
-            {t("common.add")}
-          </Button>
-        </Stack>
-      </Paper>
-
+              {t("common.add")}
+            </Button>
+          </Stack>
+        </Paper>
+      )}{" "}
       {/* List table */}
       <TableContainer component={Paper}>
         <Table>
@@ -241,13 +245,15 @@ export default function SharedPage({ entity }: Props) {
                   {r.status ? t("common.active") : t("common.inactive")}
                 </TableCell>
                 <TableCell>
-                  <Button
-                    size="small"
-                    onClick={() => setEditing(r)}
-                    sx={{ mr: 1 }}
-                  >
-                    {t("common.edit")}
-                  </Button>
+                  {can(entity, "update") && (
+                    <Button
+                      size="small"
+                      onClick={() => setEditing(r)}
+                      sx={{ mr: 1 }}
+                    >
+                      {t("common.edit")}
+                    </Button>
+                  )}
                   {can(entity, "delete") && (
                     <Button
                       size="small"
@@ -270,7 +276,6 @@ export default function SharedPage({ entity }: Props) {
           </TableBody>
         </Table>
       </TableContainer>
-
       {/* Edit dialog */}
       <Dialog
         open={!!editing}
